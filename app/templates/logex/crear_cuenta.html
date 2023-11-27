@@ -1,0 +1,25 @@
+{% extends 'logex/Index.html' %}
+
+{% block Titulo %}
+Crear Cuenta
+{% endblock %}
+
+{% block Contenido %}
+<div class="form-crear-sesion">
+    <div class="row">
+        <div class="col-md-12 mx-auto mt-5">
+            <div class="card">
+                <div class="card-header">Crear Cuenta</div>
+                <div class="card-body">
+                    <form class="form" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-success">Crear Cuenta</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

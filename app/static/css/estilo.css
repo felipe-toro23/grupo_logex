@@ -1,0 +1,19 @@
+/* esto es el Body general */
+
+body{ 
+    background-image: url('{% static "img/Fondo.jpg" %}'); 
+    background-size: cover;  
+}
+
+/* esto es crear usuario*/
+
+.form-crear-sesion{/* control general del contenedor */
+    max-width: 800px;
+    margin: 0 auto;
+    margin-left: auto;
+}
+
+.form-control,
+.btn-success {/* control de las cajas input */
+    margin-top: 10px; 
+}

@@ -1,0 +1,33 @@
+{%  extends 'logex/feed.html'%}
+
+{%block Titulo  %}
+Agregar Encomiendas
+{%endblock%}
+
+{% block Contenido %}
+  <h2>Lista de Entregas</h2>
+  {% if entregas %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha de Registro</th>
+          <th>Fecha de Entrega</th>
+          <th>Producto</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entrega in entregas %}
+          <tr>
+            <td>{{ entrega.id_entregas }}</td>
+            <td>{{ entrega.fecha_registro }}</td>
+            <td>{{ entrega.fech_entrega }}</td>
+            <td>{{ entrega.producto }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No hay entregas registradas.</p>
+  {% endif %}
+{% endblock %}
