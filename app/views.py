@@ -147,8 +147,7 @@ def guardar_paquete(request):
             paquete.direccion = nueva_direccion
             paquete.save()
 
-            return redirect('obtener_id_cuenta')  # Cambia 'nombre_de_tu_template' al nombre de tu template de éxito o a la URL que desees redirigir
-
+            return redirect('Listado_encomiendas.html')
     else:
         form = PaqueteForm()
 
