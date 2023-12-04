@@ -25,22 +25,6 @@ class Usuarios(AbstractUser):
     apellido_cli = models.CharField(max_length=25)
     direcciones = models.ForeignKey(Direcciones, on_delete=models.CASCADE)
 
-    groups = models.ManyToManyField(
-        Group,
-        verbose_name=_('groups'),
-        blank=True,
-        related_name='usuarios_set_custom',  # Cambia este nombre
-        related_query_name='user',
-    )
-
-    user_permissions = models.ManyToManyField(
-        Permission,
-        verbose_name=_('user permissions'),
-        blank=True,
-        related_name='usuarios_set_custom',  # Cambia este nombre
-        related_query_name='user',
-    )
-
     def __str__(self):
         return self.username
 
@@ -49,34 +33,11 @@ class Paquetes(models.Model):
     cuenta = models.ForeignKey(Usuarios, on_delete=models.CASCADE, related_name='paquetes')
     nom_paq = models.CharField(max_length=50)
     nom_recep = models.CharField(max_length=50, blank=False, null=False)
-    remitente = models.ForeignKey(Usuarios, on_delete=models.CASCADE, related_name='paquetes_remitidos')
     cel_recep = models.BigIntegerField(blank=False, null=False)
-    direccion = models.ForeignKey(Direcciones, on_delete=models.CASCADE, related_name='paquetes_direccion', blank=False, null=False)
+    direccion = models.ForeignKey(Direcciones, on_delete=models.CASCADE)
     fec_reti = models.DateField()
     detalles_paq = models.CharField(max_length=300, null=True, blank=True)
 
-   
-    def save(self, commit=True, request=None):
-        paquete = super().save(commit=False)
-
-        # Obtén el remitente desde el usuario actual
-        remitente = request.user
-        paquete.remitente = remitente
-
-        if commit:
-            paquete.save()
-
-            # Crear una nueva dirección y enlazarla al paquete como dirección de entrega
-            nueva_direccion = Direcciones.objects.create(
-                calle=self.cleaned_data['direccion_calle'],
-                numeracion=self.cleaned_data['direccion_numeracion'],
-                comuna=self.cleaned_data['direccion_comuna'],
-                # Otros campos de dirección...
-            )
-            paquete.direccion = nueva_direccion
-            paquete.save()
-
-        return paquete
 
 # Grupo 4
 class PlanillaRetiros(models.Model):
@@ -91,13 +52,3 @@ class PlanillasEntregas(models.Model):
     producto = models.ForeignKey(Paquetes, on_delete=models.CASCADE, related_name='entregas')
     
 
-@receiver(pre_save, sender=PlanillasEntregas)
-def calcular_fecha_entrega(sender, instance, **kwargs):
-    # Verificar si la fecha de entrega ya está establecida
-    if not instance.fech_entrega:
-        # Calcular la fecha de entrega como 2 días después de la fecha de registro
-        fecha_registro = PlanillaRetiros.objects.get(producto=instance.producto).fecha_registro
-        fecha_entrega = fecha_registro + timedelta(days=2)
-        
-        # Establecer la fecha de entrega en el modelo PlanillasEntregas
-        instance.fech_entrega = fecha_entrega

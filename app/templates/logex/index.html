@@ -18,8 +18,20 @@
             <a class="nav-item nav-link" href="{% url 'Crear_cuenta' %}">Crear cuenta</a>
         </div>
     </nav>
-    <img src="" alt="">
-    {% block Contenido %}
-    {% endblock %}
+    
+    <div class="Contenido">
+        {% block Contenido %}
+        {% endblock %}
+    </div>
 </body>
+<footer>
+    <div class="contacto">
+        <h2>Contacto</h2>
+        <button onclick="window.location.href='https://www.instagram.com/grupologex.cl/'">Instagram: GrupoLogex.cl</button><br>
+        <button onclick="window.location.href='https://www.facebook.com/people/Grupo-Logex/100066425122706/?paipv=0&eav=AfZ3L_N1PxWIxGsY2ArfKcjpjuLXIcGk-tgnwv3F-9ELOXR24esXC3oOnkUFBT4XBTY&_rdr'">Facebook: Grupo Logex</button><br>
+        <button onclick="window.location.href='https://wa.me/56977569894'">WhatsApp: +56 9 7756 9894</button>
+    </div>
+</footer>
+
+
 </html>

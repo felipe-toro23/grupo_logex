@@ -63,7 +63,37 @@ class CreaUsuForm(forms.Form):
 class PaqueteForm(forms.ModelForm):
     class Meta:
         model = Paquetes
-        fields = ['nom_paq', 'nom_recep', 'cel_recep', 'peso', 'direccion', 'fec_reti', 'cantidad', 'detalles_paq']
-        widgets = {
-            'fec_reti': forms.DateInput(attrs={'type': 'date'}),
-        }
+        fields = ['nom_paq', 'nom_recep', 'cel_recep', 'direccion_calle', 'direccion_numeracion', 'direccion_comuna', 'detalles_paq']
+
+    nom_paq = forms.CharField(
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del paquete'})
+    )
+    
+    nom_recep = forms.CharField(
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre del receptor'})
+    )
+    
+    cel_recep = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Celular del receptor'})
+    )
+    
+    direccion_calle = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Calle'})
+    )
+    direccion_numeracion = forms.CharField(
+        max_length=255,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Numeración'})
+    )
+    direccion_comuna = forms.ChoiceField(
+        choices=COMUNAS_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    detalles_paq = forms.CharField(
+        max_length=300,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Detalles del paquete'})
+    )

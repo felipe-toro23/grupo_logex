@@ -6,23 +6,31 @@ Agregar Encomiendas
 
 {% block Contenido %}
   <h2>Lista de Entregas</h2>
-  {% if entregas %}
+  {% if Paquetes %}
     <table class="table table-striped">
       <thead>
         <tr>
           <th>ID</th>
-          <th>Fecha de Registro</th>
-          <th>Fecha de Entrega</th>
-          <th>Producto</th>
+          <th>Remitente</th>
+          <th>Paquete</th>
+          <th>Receptor</th>
+          <th>Cel</th>
+          <th>Dia de Retiro</th>
+          <th>Detalles</th>
+          <th>Direccion</th>
         </tr>
       </thead>
       <tbody>
-        {% for entrega in entregas %}
+        {% for entrega in Paquetes %}
           <tr>
-            <td>{{ entrega.id_entregas }}</td>
-            <td>{{ entrega.fecha_registro }}</td>
-            <td>{{ entrega.fech_entrega }}</td>
-            <td>{{ entrega.producto }}</td>
+            <td>{{ entrega.id_paquete }}</td>
+            <td>{{ entrega.cuenta }}</td>
+            <td>{{ entrega.nom_paq }}</td>
+            <td>{{ entrega.nom_recep }}</td>
+            <td>{{ entrega.cel_recep }}</td>
+            <td>{{ entrega.fec_reti }}</td>
+            <td>{{ entrega.detalles_paq }}</td>
+            <td>{{ entrega.direccion.calle_dire }}, {{ entrega.direccion.numeracio_dire }}, {{ entrega.direccion.comuna }}</td>
           </tr>
         {% endfor %}
       </tbody>

@@ -1,14 +1,15 @@
-from django.shortcuts import render, redirect
-from .models import Usuarios, Direcciones, Paquetes
-from .forms import CreaUsuForm, PaqueteForm
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from .models import PlanillasEntregas, PlanillaRetiros
 from datetime import datetime, timedelta
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout, get_user_model
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from .forms import CreaUsuForm, PaqueteForm
+from .models import Usuarios, Direcciones, Paquetes, PlanillasEntregas, PlanillaRetiros
+from django.contrib import messages
+from django.db import IntegrityError
+
 
 
 
@@ -16,14 +17,12 @@ def index(request):
     return render(request, "logex/home.html")
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import get_user_model
-from django.db import IntegrityError
-from .forms import CreaUsuForm
+
 
 def Crear_cuenta(request):
     if request.method == "POST":
         form = CreaUsuForm(request.POST)
+
         if form.is_valid():
             try:
                 direccion_calle = form.cleaned_data['direccion_calle']
@@ -62,29 +61,6 @@ def Crear_cuenta(request):
     return render(request, "logex/crear_cuenta.html", {'form': form})
 
 
-def iniciar_sesion(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-
-            user = authenticate(request, username=username, password=password)
-
-            if user is not None:
-                print(f"Usuario autenticado: {user}")
-                login(request, user)
-                print("Inicio de sesión exitoso.")
-                return HttpResponseRedirect(reverse('logex:profile'))
-            else:
-                print(f"Error de credenciales para usuario: {username}")
-        else:
-            print("Formulario no válido")
-    else:
-        form = AuthenticationForm()
-
-    return render(request, 'registration/login.html', {'form': form})
-
 
 @login_required
 def profile(request):
@@ -95,65 +71,68 @@ def salir(request):
     logout(request)
     return redirect('/')
 
-from django.shortcuts import render, redirect
-from .forms import PaqueteForm
-
-
-
-@login_required
-def obtener_id_cuenta(request):
-    usuario_actual = request.user
-
-    direccion_usuario = usuario_actual.direcciones
-
-    datos_remitente = {
-        'id_cuenta': usuario_actual.id_cuenta,
-        'rut_cli': usuario_actual.rut_cli,
-        'nombre': usuario_actual.nombre_cli,
-        'apellido': usuario_actual.apellido_cli,
-        'direccion': {
-            'calle': direccion_usuario.calle_dire,
-            'numeracion': direccion_usuario.numeracio_dire,
-            'comuna': direccion_usuario.comuna.comuna
-        }
-    }
-
-
-    form = PaqueteForm(initial={
-        'nom_recep': f"{usuario_actual.nombre_cli} {usuario_actual.apellido_cli}",
-        'direccion': f"{direccion_usuario.calle_dire}, {direccion_usuario.numeracio_dire}, {direccion_usuario.comuna.comuna}",
-    })
-
-    return render(request, 'logex/nueva_encomienda.html', {'datos_remitente': datos_remitente, 'form': form})
-
 
 @login_required
 def guardar_paquete(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = PaqueteForm(request.POST)
 
         if form.is_valid():
-            paquete = form.save(commit=False)
+            try:
+                direccion_calle = form.cleaned_data['direccion_calle']
+                direccion_numeracion = form.cleaned_data['direccion_numeracion']
+                direccion_comuna = form.cleaned_data['direccion_comuna']
 
-            paquete.remitente = request.user
+                direccion, created = Direcciones.objects.get_or_create(
+                    calle_dire=direccion_calle,
+                    numeracio_dire=direccion_numeracion,
+                    comuna_id=direccion_comuna
+                )
 
-            paquete.save()
+                if request.user.is_authenticated:
+                    username_autentic = request.user.username
 
-            nueva_direccion = Direcciones.objects.create(
-                calle=form.cleaned_data['direccion_calle'],
-                numeracion=form.cleaned_data['direccion_numeracion'],
-                comuna=form.cleaned_data['direccion_comuna'],
-            )
-            paquete.direccion = nueva_direccion
-            paquete.save()
+                usuario = get_object_or_404(Usuarios, username=username_autentic)
 
-            return redirect('Listado_encomiendas.html')
+
+                
+
+                nom_paq = form.cleaned_data['nom_paq']
+                nom_recep = form.cleaned_data['nom_recep']
+                cel_recep = form.cleaned_data['cel_recep']
+                fec_reti = datetime.now() + timedelta(days=1)
+                detalles_paq = form.cleaned_data['detalles_paq']
+
+                # guarda los datos en la tabla Paquetes y Direcciones, recuerda que esta basado en el models usuario
+                nuevo_paquete = Paquetes.objects.create(
+                    cuenta=usuario,
+                    nom_paq=nom_paq,
+                    nom_recep=nom_recep,
+                    cel_recep=cel_recep,
+                    direccion=direccion,
+                    fec_reti=fec_reti,
+                    detalles_paq=detalles_paq
+                )
+
+
+                return render(request, "logex/Listado_encomiendas.html")
+            except IntegrityError as e:
+                form.add_error('username', 'Este nombre de usuario ya está en uso. Por favor, elige otro.')
     else:
         form = PaqueteForm()
 
-    return render(request, 'logex/nueva_encomienda.html', {'form': form})
-
+    return render(request, "logex/nueva_encomienda.html", {'form': form})
+                                            
 
 
 def encomiendas(request):
-    pass
+
+    usuario = get_object_or_404(Usuarios, username=request.user.username)
+    paquetes = Paquetes.objects.filter(cuenta=usuario).select_related('direccion')
+
+
+    data = {
+        'Paquetes': paquetes
+    }
+
+    return render(request, "logex/Listado_encomiendas.html", data)
