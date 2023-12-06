@@ -53,7 +53,6 @@ footer {
 /*esto es el css de la creacion de encomiendas*/
 
 
-/* Estilos para la caja que contiene el formulario */
 .encomienda-form {
     max-width: 500px; /* Ajusta el ancho máximo según tus preferencias */
     margin: 0 auto; /* Centra la caja horizontalmente */
@@ -68,4 +67,24 @@ footer {
 /* Estilos para el botón dentro del formulario */
 .encomienda-form form button {
     width: 100%; /* Hace que el botón ocupe el ancho completo del formulario */
+}
+
+/* control del footer */
+
+footer {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: center;
+    margin-top: auto; /* Esto asegura que el footer esté pegado en la parte inferior */
+}
+
+/* alinea los botones del footer dales un color azul */
+footer button {
+    margin: 0 10px;
+    background-color: #4c5eaf;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
 }
