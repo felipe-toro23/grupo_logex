@@ -8,17 +8,22 @@ body {
     flex-direction: column;
 }
 
-.form-crear-sesion {
-    max-width: 800px;
-    margin: 0 auto;
-    margin-top: 10px;
-    display: block;
+
+
+.Contenido{
+    position: relative;
+    z-index: 2;
 }
 
-.form-control,
-.btn-success {
-    margin-top: 10px;
+
+
+
+
+.container{
+    /* crea espacio entre los input de este formulario */
+    margin-top: 50px;
     display: block;
+
 }
 
 /* Agrega estilos para las etiquetas h2 */
@@ -26,29 +31,6 @@ h2 {
     text-align: center;
 }
 
-/* Contenedor principal de las cajas flete-info */
-.fletes-disponibles {
-    display: flex;
-    justify-content: space-around; /* Puedes ajustar esto según tus preferencias */
-}
-
-/* Estilos para las cajas de felte-info */
-.flete-info1,
-.flete-info2,
-.flete-info3 {
-    width: 30%;
-    height: 100%;
-    background-color: #f1f1f1;
-    padding: 20px;
-    margin: 10px;
-}
-/* Estilos para el footer */
-footer {
-    background-color: #f1f1f1;
-    padding: 20px;
-    text-align: center;
-    margin-top: auto; /* Esto asegura que el footer esté pegado en la parte inferior */
-}
 
 /*esto es el css de la creacion de encomiendas*/
 
@@ -78,13 +60,25 @@ footer {
     margin-top: auto; /* Esto asegura que el footer esté pegado en la parte inferior */
 }
 
-/* alinea los botones del footer dales un color azul */
-footer button {
-    margin: 0 10px;
-    background-color: #4c5eaf;
-    color: white;
-    padding: 14px 20px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
+/* Css de las tarjetas de definicion de sectores */
+
+.Cards-container {
+    display: flex;
+    justify-content: space-between; 
+    max-width: 500px; /* Ajusta el ancho máximo según tus preferencias */
+    margin: 0 auto; /* Centra la caja horizontalmente */
+    padding: 20px; /* Añade relleno para separar los bordes de la caja del contenido */
 }
+
+.card {
+    width: 100%; /* Ajusta el ancho de las tarjetas según sea necesario */
+    margin-right: 100px; /* Ajusta la separación horizontal entre tarjetas según sea necesario */
+    /* Otros estilos de las tarjetas según sea necesario */
+}
+
+.card-body {
+    margin-top: 20px; /* Ajusta la separación entre el título y el párrafo según sea necesario */
+}
+
+
+

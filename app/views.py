@@ -8,7 +8,7 @@ from django.urls import reverse
 from .forms import CreaUsuForm, PaqueteForm
 from .models import Usuarios, Direcciones, Paquetes, PlanillasEntregas, PlanillaRetiros
 from django.contrib import messages
-from django.db import IntegrityError
+from django.db import IntegrityError, DataError
 
 
 
@@ -54,7 +54,11 @@ def Crear_cuenta(request):
 
                 return render(request, "logex/loby.html")
             except IntegrityError as e:
-                form.add_error('username', 'Este nombre de usuario ya está en uso. Por favor, elige otro.')
+                form.add_error('username', 'Este nombre de usuario ya está en uso. Por favor, elige otro.')#revisar este error
+
+            except DataError as e:
+                messages.error(request, 'Error al crear la cuenta: los datos son demasiado largos.') #revisar este error
+
     else:
         form = CreaUsuForm()
 
