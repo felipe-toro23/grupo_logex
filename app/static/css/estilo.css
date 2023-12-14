@@ -65,8 +65,7 @@ footer {
 .Cards-container {
     display: flex;
     justify-content: space-between; 
-    max-width: 500px; /* Ajusta el ancho máximo según tus preferencias */
-    margin: 0 auto; /* Centra la caja horizontalmente */
+    margin-top: 200px; /* Centra la caja horizontalmente */
     padding: 20px; /* Añade relleno para separar los bordes de la caja del contenido */
 }
 
@@ -74,10 +73,6 @@ footer {
     width: 100%; /* Ajusta el ancho de las tarjetas según sea necesario */
     margin-right: 100px; /* Ajusta la separación horizontal entre tarjetas según sea necesario */
     /* Otros estilos de las tarjetas según sea necesario */
-}
-
-.card-body {
-    margin-top: 20px; /* Ajusta la separación entre el título y el párrafo según sea necesario */
 }
 
 
