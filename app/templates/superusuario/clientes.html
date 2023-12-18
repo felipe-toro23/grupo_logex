@@ -1,0 +1,39 @@
+{%  extends 'superusuario/indexsupuser.html'%}
+
+{% block Contenido %}
+  <h2>Lista de Clientes</h2>
+  {% if clientes %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID de Cuenta</th>
+          <th>RUT</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Dirección</th>
+          <th>Acciones</th>  <!-- Nueva columna para las acciones -->
+        </tr>
+      </thead>
+      <tbody>
+        {% for cliente in clientes %}
+          <tr>
+            <td>{{ cliente.id_cuenta }}</td>
+            <td>{{ cliente.rut_cli }}</td>
+            <td>{{ cliente.nombre_cli }}</td>
+            <td>{{ cliente.apellido_cli }}</td>
+            <td>{{ cliente.direcciones.calle_dire }}, {{ cliente.direcciones.numeracio_dire }}, {{ cliente.direcciones.comuna.comuna }}</td>
+            <td>
+              <!-- Formulario para enviar solicitud de eliminación -->
+              <form method="post" action="{% url 'eliminar_cliente' cliente.id_cuenta %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No hay clientes registrados.</p>
+  {% endif %}
+{% endblock %}

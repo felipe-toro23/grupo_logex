@@ -9,5 +9,8 @@ urlpatterns = [
     path("accounts/profile/", views.profile, name="profile"),
     path("accounts/new_encomiendas/", views.guardar_paquete, name="new_encomiendas"),
     path("accounts/encomiendas/", views.encomiendas, name="encomiendas"),
+    path("entregasupuser", views.entregasupuser, name="entregasupuser"),
+    path("verclientes", views.verclientes, name="verclientes"),
+    path('eliminar_cliente/<int:id_cliente>/', views.eliminar_cliente, name='eliminar_cliente'),
     path("salir", views.salir, name="salir")
 ]

@@ -76,4 +76,7 @@ footer {
 }
 
 
-
+.filtro-fecha {
+    width: 80%; /* Ajusta el valor según tus necesidades */
+    margin: auto; /* Centra el contenedor horizontalmente */
+  }

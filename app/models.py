@@ -23,7 +23,7 @@ class Usuarios(AbstractUser):
     rut_cli = models.CharField(max_length=12, unique=True)
     nombre_cli = models.CharField(max_length=25)
     apellido_cli = models.CharField(max_length=25)
-    direcciones = models.ForeignKey(Direcciones, on_delete=models.CASCADE)
+    direcciones = models.ForeignKey(Direcciones, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.username

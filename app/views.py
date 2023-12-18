@@ -17,8 +17,6 @@ def index(request):
     return render(request, "logex/home.html")
 
 
-
-
 def Crear_cuenta(request):
     if request.method == "POST":
         form = CreaUsuForm(request.POST)
@@ -65,10 +63,13 @@ def Crear_cuenta(request):
     return render(request, "logex/crear_cuenta.html", {'form': form})
 
 
-
 @login_required
 def profile(request):
-    return render(request, "logex/loby.html")
+    #crea in if que envie a otra pagina si es super usuario
+    if request.user.is_superuser:
+        return render(request, "superusuario/entregas.html")
+    else:
+        return render(request, "logex/loby.html")
 
 
 def salir(request):
@@ -128,7 +129,6 @@ def guardar_paquete(request):
     return render(request, "logex/nueva_encomienda.html", {'form': form})
                                             
 
-
 def encomiendas(request):
 
     usuario = get_object_or_404(Usuarios, username=request.user.username)
@@ -140,3 +140,38 @@ def encomiendas(request):
     }
 
     return render(request, "logex/Listado_encomiendas.html", data)
+
+def eliminar_cliente(request, id_cliente):
+    cliente = Usuarios.objects.get(id_cuenta=id_cliente)
+    
+    if request.method == 'POST':
+        cliente.delete()
+        return redirect('verclientes')  # Redirigir a la lista de clientes después de la eliminación
+    
+    return render(request, 'superusuario/clientes.html', {'cliente': cliente})
+
+def entregasupuser(request):
+    fecha_inicio = request.GET.get('fecha_inicio', None)
+    fecha_fin = request.GET.get('fecha_fin', None)
+
+    paquetes = Paquetes.objects.all()
+
+    if fecha_inicio and fecha_fin:
+        fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
+        fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d").date()
+        paquetes = paquetes.filter(fec_reti__range=(fecha_inicio, fecha_fin))
+
+    data = {
+        'Paquetes': paquetes
+    }
+
+    return render(request, "superusuario/entregas.html", data)
+
+def verclientes(request):
+    clientes = Usuarios.objects.filter(is_superuser=False)
+
+    data = {
+        'clientes': clientes
+    }
+
+    return render(request, "superusuario/clientes.html", data)

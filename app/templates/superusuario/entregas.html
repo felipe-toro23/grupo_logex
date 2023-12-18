@@ -1,0 +1,63 @@
+{%  extends 'superusuario/indexsupuser.html'%}
+
+{%block Titulo  %}
+Entregas 
+{%endblock%}
+
+{% block Contenido %}
+  <h2>Lista de Entregas</h2>
+
+  <div class="filtro-fecha col-md-2 col-sm-4 col-6 ms-3 d-flex justify-content-center align-items-center">
+    <div>
+        <form method="get" action="{% url 'entregasupuser' %}">
+            <div class="mb-3">
+                <label for="fecha_inicio">Fecha de Inicio:</label>
+                <input type="date" name="fecha_inicio" id="fecha_inicio">
+            </div>
+
+            <div class="mb-3">
+                <label for="fecha_fin">Fecha de Fin:</label>
+                <input type="date" name="fecha_fin" id="fecha_fin">
+            </div>
+
+            <button class="btn btn-primary" type="submit">Filtrar por Fecha</button>
+        </form>
+    </div>
+</div>
+
+
+  <br>
+
+  {% if Paquetes %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Remitente</th>
+          <th>Paquete</th>
+          <th>Receptor</th>
+          <th>Cel</th>
+          <th>Dia de Retiro</th>
+          <th>Detalles</th>
+          <th>Direccion</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for entrega in Paquetes %}
+          <tr>
+            <td>{{ entrega.id_paquete }}</td>
+            <td>{{ entrega.cuenta }}</td>
+            <td>{{ entrega.nom_paq }}</td>
+            <td>{{ entrega.nom_recep }}</td>
+            <td>{{ entrega.cel_recep }}</td>
+            <td>{{ entrega.fec_reti }}</td>
+            <td>{{ entrega.detalles_paq }}</td>
+            <td>{{ entrega.direccion.calle_dire }}, {{ entrega.direccion.numeracio_dire }}, {{ entrega.direccion.comuna }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No hay entregas registradas.</p>
+  {% endif %}
+{% endblock %}
